@@ -1,15 +1,14 @@
-package com.example.movieandtv.favorite;
+package com.example.movieandtvwidget.favorite;
 
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,32 +16,30 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.movieandtv.R;
-import com.example.movieandtv.db.FavoriteHelper;
-import com.example.movieandtv.db.MappingHelper;
+import com.example.movieandtvwidget.R;
+import com.example.movieandtvwidget.db.FavoriteHelperTv;
+import com.example.movieandtvwidget.db.MappingHelperTv;
+import com.example.movieandtvwidget.tvshow.DetailTvShow;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Objects;
 
-import static androidx.constraintlayout.widget.Constraints.TAG;
-
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MovieFavFragment extends Fragment implements LoadFavoritesCallback {
-    private MovieFavAdapter adapter;
+public class TvFavFragment extends Fragment implements LoadFavoritesCallbackTv {
+    private TvFavAdapter adapter;
     private ProgressBar progressBar;
-    private FavoriteHelper favoriteHelper;
+    private FavoriteHelperTv favoriteHelper;
     private static final String EXTRA_STATE = "EXTRA_STATE";
-
     private RecyclerView rvMovies;
 
 
 
-    public MovieFavFragment() {
+    public TvFavFragment() {
         // Required empty public constructor
     }
 
@@ -51,28 +48,43 @@ public class MovieFavFragment extends Fragment implements LoadFavoritesCallback 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_movie, container, false);
+        return inflater.inflate(R.layout.fragment_tv_show, container, false);
 
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        progressBar = view.findViewById(R.id.progressBar);
+        progressBar = view.findViewById(R.id.tvprogressBar);
 
-        rvMovies = view.findViewById(R.id.rv_movies);
+
+        rvMovies = view.findViewById(R.id.rv_tvshows);
         rvMovies.setHasFixedSize(true);
         rvMovies.setLayoutManager(new LinearLayoutManager(getActivity()));
-        adapter = new MovieFavAdapter(getActivity());
+        adapter = new TvFavAdapter(getActivity());
         rvMovies.setAdapter(adapter);
 
 
-        favoriteHelper = FavoriteHelper.getInstance(getActivity().getApplicationContext());
+        favoriteHelper = FavoriteHelperTv.getInstance(getContext());
         favoriteHelper.open();
 
 //        proses ambil data
-        new LoadFavoritesAsync(favoriteHelper, this).execute();
+        if (savedInstanceState == null) {
+            new LoadFavoritesAsync(favoriteHelper, this).execute();
+        } else {
+            ArrayList<FavoriteItem> list = savedInstanceState.getParcelableArrayList(EXTRA_STATE);
+            if (list != null) {
+                adapter.setFavTv(list);
+                adapter.notifyDataSetChanged();
+            }
+        }
 
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList(EXTRA_STATE, adapter.getFavTv());
     }
 
 
@@ -98,19 +110,19 @@ public class MovieFavFragment extends Fragment implements LoadFavoritesCallback 
          */
         progressBar.setVisibility(View.INVISIBLE);
         if (favoriteItems.size() > 0) {
-            adapter.setFavMovies(favoriteItems);
+            adapter.setFavTv(favoriteItems);
         } else {
-            adapter.setFavMovies(new ArrayList<FavoriteItem>());
-            showSnackbarMessage("Tidak ada data saat ini");
+            adapter.setFavTv(new ArrayList<FavoriteItem>());
+            showSnackbarMessage(getString(R.string.no_fav));
         }
     }
 
     private class LoadFavoritesAsync extends AsyncTask<Void, Void, ArrayList<FavoriteItem>> {
 
-        WeakReference<FavoriteHelper> weakFavoriteHelper;
-        WeakReference<LoadFavoritesCallback> weakCallback;
+        WeakReference<FavoriteHelperTv> weakFavoriteHelper;
+        WeakReference<LoadFavoritesCallbackTv> weakCallback;
 
-        LoadFavoritesAsync(FavoriteHelper favoriteHelper, LoadFavoritesCallback callback) {
+        LoadFavoritesAsync(FavoriteHelperTv favoriteHelper, LoadFavoritesCallbackTv callback) {
             weakFavoriteHelper = new WeakReference<>(favoriteHelper);
             weakCallback = new WeakReference<>(callback);
         }
@@ -124,8 +136,7 @@ public class MovieFavFragment extends Fragment implements LoadFavoritesCallback 
         @Override
         protected ArrayList<FavoriteItem> doInBackground(Void... voids) {
             Cursor dataCursor = weakFavoriteHelper.get().queryAll();
-            Log.d(TAG, "cek query");
-            return MappingHelper.mapCursorToArrayList(dataCursor);
+            return MappingHelperTv.mapCursorToArrayList(dataCursor);
         }
 
         @Override
@@ -134,6 +145,29 @@ public class MovieFavFragment extends Fragment implements LoadFavoritesCallback 
             weakCallback.get().postExecute(favoriteItems);
         }
 
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (data != null) {
+            if (requestCode == DetailTvShow.REQUEST_ADD) {
+                if (resultCode == DetailTvShow.RESULT_ADD) {
+                    FavoriteItem favoriteItem = data.getParcelableExtra(DetailTvShow.EXTRA_FAVORITE);
+
+                    adapter.addItem(favoriteItem);
+                    rvMovies.smoothScrollToPosition(adapter.getItemCount() - 1);
+                    showSnackbarMessage(getString(R.string.add_fav1));
+                }
+            } else if (requestCode == DetailTvShow.REQUEST_UPDATE) {
+                if (resultCode == DetailTvShow.RESULT_DELETE) {
+                    int position = data.getIntExtra(DetailTvShow.EXTRA_POSITION, 0);
+                    adapter.removeItem(position);
+                    adapter.notifyDataSetChanged();
+                    showSnackbarMessage(getString(R.string.del_fav1));
+                }
+            }
+        }
     }
 
     private void showSnackbarMessage(String message) {
@@ -145,9 +179,18 @@ public class MovieFavFragment extends Fragment implements LoadFavoritesCallback 
         super.onDestroy();
         favoriteHelper.close();
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        favoriteHelper.open();
+        new LoadFavoritesAsync(favoriteHelper, this).execute();
+    }
+
+
 }
 
-interface LoadFavoritesCallback {
+interface LoadFavoritesCallbackTv {
     void preExecute();
     void postExecute(ArrayList<FavoriteItem> favoriteItems);
 }

@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_detail"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.movieandtvwidget.movie.DetailActivity">
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/img_item_photo"
+                android:layout_width="match_parent"
+                android:layout_height="433dp"
+                android:layout_margin="1dp"
+                android:scaleType="matrix"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0"
+                tools:src="@color/colorAccent" />
+
+            <TextView
+                android:id="@+id/tv_item_judul"
+                style="@style/TextContent.Title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:text="@string/movie_name"
+                android:textColor="@android:color/black"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/img_item_photo" />
+
+            <TextView
+                android:id="@+id/tv_item_year"
+                style="@style/TextContent"
+                android:layout_width="wrap_content"
+                android:layout_height="21dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:text="@string/movie_popularity"
+                android:drawableLeft="@drawable/ic_eye_black"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/tv_item_deskripsi"
+                app:layout_constraintTop_toBottomOf="@+id/tv_item_judul" />
+
+            <TextView
+                android:id="@+id/tv_item_deskripsi"
+                style="@style/TextContent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="8dp"
+                android:lineSpacingMultiplier="1"
+                android:text="@string/movie_desc"
+                android:textColor="@android:color/black"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/tv_item_judul"
+                app:layout_constraintTop_toBottomOf="@+id/tv_item_year" />
+
+            <TextView
+                android:id="@+id/tv_item_id"
+                style="@style/TextContent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="8dp"
+                android:lineSpacingMultiplier="1"
+                android:text="@string/movie_id"
+                android:textColor="@android:color/black"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/tv_item_year"
+                app:layout_constraintTop_toBottomOf="@+id/tv_item_deskripsi" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/btn_fav"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="@dimen/activity_vertical_margin"
+            app:srcCompat="@drawable/ic_favorite_white"
+            app:backgroundTint="@android:color/holo_red_light"/>
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+</ScrollView>

@@ -1,0 +1,43 @@
+<resources>
+
+
+    <string name="app_name">Movie and TV</string>
+
+    <string name="title_movies">Movie</string>
+    <string name="title_tvshow">TV Show</string>
+
+    <string name="movies">My Top 10 Movies</string>
+    <string name="tvshow">My Top 10 Tv Show</string>
+    <string name="movie_name">Movie Title</string>
+
+    <string name="movie_popularity">Popularity</string>
+    <string name="movie_desc">Movie Description</string>
+    <string name="movie_id">ID Movie</string>
+
+    <string name="add_fav">Add to Favorite</string>
+    <string name="favorite_list">My Favorite List</string>
+    <string name="del_fav">Delete From Favorite?</string>
+    <string name="del_fav_sure">Are You Sure This is not your Favorite anymore?</string>
+    <string name="del_fav_failed">Delete From Favorite Failed</string>
+    <string name="add_success">Added to Favorite</string>
+    <string name="add_failed">Already in Favorite List</string>
+    <string name="no_fav">Favorite not chosen yet</string>
+    <string name="add_fav1">1 item added to favorites</string>
+    <string name="del_fav1">1 item deleted from favorites</string>
+
+    <string name="btn_ok">OK</string>
+    <string name="btn_cancel">Cancel</string>
+
+    <string name="tvshow_name">TV Show Title</string>
+
+    <string name="tvshow_pop">TV Show Popularity</string>
+
+    <string name="tvshow_desc">TV Show Description</string>
+
+    <string name="change_language_settings">Change Language</string>
+
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+</resources>

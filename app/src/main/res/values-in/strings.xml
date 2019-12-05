@@ -1,0 +1,37 @@
+<resources>
+    <string name="app_name">Film dan TV</string>
+    <string name="title_movies">Film</string>
+    <string name="title_tvshow">Acara TV</string>
+
+    <string name="movies">10 Film Favoritku</string>
+    <string name="tvshow">10 Acara TV Favoritku</string>
+
+    <string name="movie_name">Judul Film</string>
+    <string name="movie_popularity">Tahun Tayang</string>
+    <string name="movie_desc">Deskripsi Film</string>
+    <string name="movie_id">ID Movie</string>
+
+    <string name="add_fav">Tambah ke daftar Favorit</string>
+    <string name="favorite_list">Daftar Favorit</string>
+    <string name="del_fav">hapus dari Daftar Favorit?</string>
+    <string name="del_fav_sure">yakin ga suka lagi?</string>
+    <string name="del_fav_failed">Gagal menghapus Favorit</string>
+    <string name="add_success">Ditambahkan ke Favorit</string>
+    <string name="add_failed">Sudah Favorit</string>
+    <string name="no_fav">Favorit belum dipilih</string>
+    <string name="add_fav1">item berhasil ditambahkan ke favorit</string>
+    <string name="del_fav1">item berhasil dihapus dari favorit</string>
+
+    <string name="btn_ok">OK</string>
+    <string name="btn_cancel">Batal</string>
+
+    <string name="tvshow_name">Judul Acara TV</string>
+    <string name="tvshow_pop">Kepopuleran Acara TV</string>
+    <string name="tvshow_desc">Deskripsi Acara TV</string>
+
+
+    <string name="change_language_settings">Ubah Bahasa</string>
+
+    <string name="hello_blank_fragment">Halo blank fragment</string>
+
+</resources>
