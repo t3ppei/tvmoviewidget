@@ -12,6 +12,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+        <provider
+            android:name=".provider.MovieProvider"
+            android:authorities="com.example.movieandtvwidget"
+            android:enabled="true"
+            android:exported="true"></provider>
+
         <activity android:name=".tvshow.DetailTvShow" />
         <activity android:name=".movie.DetailActivity" />
         <activity
