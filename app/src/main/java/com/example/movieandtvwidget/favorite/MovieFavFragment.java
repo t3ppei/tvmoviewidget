@@ -20,6 +20,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.movieandtvwidget.FavoriteActivity;
 import com.example.movieandtvwidget.R;
 import com.example.movieandtvwidget.db.DatabaseContract;
 import com.example.movieandtvwidget.db.MappingHelper;
@@ -162,7 +163,7 @@ public class MovieFavFragment extends Fragment implements LoadFavoritesCallback 
         @Override
         public void onChange(boolean selfChange) {
             super.onChange(selfChange);
-            new LoadFavoritesAsync(context, (LoadFavoritesCallback) context).execute();
+            new LoadFavoritesAsync((FavoriteActivity) context, (LoadFavoritesCallback) context).execute();
         }
 
     }

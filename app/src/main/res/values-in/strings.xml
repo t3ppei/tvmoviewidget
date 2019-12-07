@@ -16,6 +16,7 @@
     <string name="del_fav">hapus dari Daftar Favorit?</string>
     <string name="del_fav_sure">yakin ga suka lagi?</string>
     <string name="del_fav_failed">Gagal menghapus Favorit</string>
+    <string name="del_fav_success">Berhasil di hapus dari favorit</string>
     <string name="add_success">Ditambahkan ke Favorit</string>
     <string name="add_failed">Sudah Favorit</string>
     <string name="no_fav">Favorit belum dipilih</string>

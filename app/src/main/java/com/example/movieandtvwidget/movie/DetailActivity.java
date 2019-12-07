@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -19,6 +20,7 @@ import com.example.movieandtvwidget.favorite.FavoriteItem;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import static android.provider.BaseColumns._ID;
+import static com.example.movieandtvwidget.db.DatabaseContract.MovieFavoriteColumns.CONTENT_URI;
 import static com.example.movieandtvwidget.db.DatabaseContract.MovieFavoriteColumns.DESCRIPTION;
 import static com.example.movieandtvwidget.db.DatabaseContract.MovieFavoriteColumns.NAME;
 import static com.example.movieandtvwidget.db.DatabaseContract.MovieFavoriteColumns.PHOTO;
@@ -27,6 +29,7 @@ import static com.example.movieandtvwidget.db.DatabaseContract.MovieFavoriteColu
 public class DetailActivity extends AppCompatActivity {
     private FavoriteItem favoriteItem;
     private FavoriteHelper favoriteHelper;
+    private Uri uriWithId;
     private FloatingActionButton fabAdd;
     private int position;
 
@@ -44,8 +47,8 @@ public class DetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
-        favoriteHelper = FavoriteHelper.getInstance(getApplicationContext());
-        favoriteHelper.open();
+//        favoriteHelper = FavoriteHelper.getInstance(getApplicationContext());
+//        favoriteHelper.open();
 
         ImageView imgFoto = findViewById(R.id.img_item_photo);
         TextView tvJudul = findViewById(R.id.tv_item_judul);
@@ -113,15 +116,18 @@ public class DetailActivity extends AppCompatActivity {
                         values.put(PHOTO, foto);
 
 
-                        long result = favoriteHelper.insert(values);
-                        if (result > 0) {
-                            favoriteItem.setId((int) result);
-                            setResult(RESULT_ADD, intent);
-                            Toast.makeText(DetailActivity.this, getString(R.string.add_success), Toast.LENGTH_LONG).show();
+//                        long result = favoriteHelper.insert(values);
+//                        if (result > 0) {
+//                            favoriteItem.setId((int) result);
+//                            setResult(RESULT_ADD, intent);
+//                            Toast.makeText(DetailActivity.this, getString(R.string.add_success), Toast.LENGTH_LONG).show();
+//                            finish();
+//                        } else {
+//                            Toast.makeText(DetailActivity.this, getString(R.string.add_failed), Toast.LENGTH_SHORT).show();
+//                        }
+                        getContentResolver().insert(CONTENT_URI, values);
+                        Toast.makeText(DetailActivity.this, getString(R.string.add_success), Toast.LENGTH_LONG).show();
                             finish();
-                        } else {
-                            Toast.makeText(DetailActivity.this, getString(R.string.add_failed), Toast.LENGTH_SHORT).show();
-                        }
 
                     }
                 });
@@ -145,15 +151,19 @@ public class DetailActivity extends AppCompatActivity {
                 .setCancelable(false)
                 .setPositiveButton(getString(R.string.btn_ok), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        long result = favoriteHelper.deleteById(String.valueOf(favoriteItem.getId()));
-                        if (result > 0) {
-                            Intent intent = new Intent();
-                            intent.putExtra(EXTRA_POSITION, position);
-                            setResult(RESULT_DELETE, intent);
-                            finish();
-                        } else {
-                            Toast.makeText(DetailActivity.this, getString(R.string.del_fav_failed) + " " + getString(R.string.title_movies), Toast.LENGTH_SHORT).show();
-                        }
+//                        long result = favoriteHelper.deleteById(String.valueOf(favoriteItem.getId()));
+//                        if (result > 0) {
+//                            Intent intent = new Intent();
+//                            intent.putExtra(EXTRA_POSITION, position);
+//                            setResult(RESULT_DELETE, intent);
+//                            finish();
+//                        } else {
+//                            Toast.makeText(DetailActivity.this, getString(R.string.del_fav_failed) + " " + getString(R.string.title_movies), Toast.LENGTH_SHORT).show();
+//                        }
+                        uriWithId = Uri.parse(CONTENT_URI + "/" + favoriteItem.getId());
+                        getContentResolver().delete(uriWithId, null, null);
+                        Toast.makeText(DetailActivity.this, getString(R.string.del_fav_success) + " " + getString(R.string.title_movies), Toast.LENGTH_SHORT).show();
+                        finish();
                     }
                 })
                 .setNegativeButton(getString(R.string.btn_cancel), new DialogInterface.OnClickListener() {

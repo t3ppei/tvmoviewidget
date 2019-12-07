@@ -19,6 +19,7 @@
     <string name="del_fav">Delete From Favorite?</string>
     <string name="del_fav_sure">Are You Sure This is not your Favorite anymore?</string>
     <string name="del_fav_failed">Delete From Favorite Failed</string>
+    <string name="del_fav_success">Deleted From Favorite</string>
     <string name="add_success">Added to Favorite</string>
     <string name="add_failed">Already in Favorite List</string>
     <string name="no_fav">Favorite not chosen yet</string>

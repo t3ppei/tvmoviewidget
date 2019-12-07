@@ -1,9 +1,10 @@
 package com.example.movieandtvwidget.db;
 
+import android.net.Uri;
 import android.provider.BaseColumns;
 
 public class DatabaseContract {
-    private static final String AUTHORITY = "com.example.movieandtvwidget";
+    public static final String AUTHORITY = "com.example.movieandtvwidget";
     private static final String SCHEME = "content";
 
     public static final class MovieFavoriteColumns implements BaseColumns {
@@ -13,7 +14,10 @@ public class DatabaseContract {
         public static final String DESCRIPTION = "description";
         public static final String PHOTO = "photo";
 
-        
+        public static final Uri CONTENT_URI = new Uri.Builder().scheme(SCHEME)
+                .authority(AUTHORITY)
+                .appendPath(TABLE_NAME)
+                .build();
     }
 
     public static final class TvFavoriteColumns implements BaseColumns {
@@ -22,6 +26,11 @@ public class DatabaseContract {
         public static final String POPULAR = "popular";
         public static final String DESCRIPTION = "description";
         public static final String PHOTO = "photo";
+
+        public static final Uri CONTENT_URI = new Uri.Builder().scheme(SCHEME)
+                .authority(AUTHORITY)
+                .appendPath(TABLE_TV)
+                .build();
     }
 
 }
