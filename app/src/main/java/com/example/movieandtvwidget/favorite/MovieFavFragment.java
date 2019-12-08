@@ -2,6 +2,7 @@ package com.example.movieandtvwidget.favorite;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.ContentObserver;
 import android.database.Cursor;
 import android.os.AsyncTask;
@@ -24,6 +25,7 @@ import com.example.movieandtvwidget.FavoriteActivity;
 import com.example.movieandtvwidget.R;
 import com.example.movieandtvwidget.db.DatabaseContract;
 import com.example.movieandtvwidget.db.MappingHelper;
+import com.example.movieandtvwidget.movie.DetailActivity;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.lang.ref.WeakReference;
@@ -74,7 +76,7 @@ public class MovieFavFragment extends Fragment implements LoadFavoritesCallback 
         Handler handler = new Handler(handlerThread.getLooper());
 
         DataObserver myObserver = new DataObserver(handler, getContext());
-        getActivity().getContentResolver().registerContentObserver(DatabaseContract.MovieFavoriteColumns.CONTENT_URI, true, myObserver);
+        getContext().getContentResolver().registerContentObserver(DatabaseContract.MovieFavoriteColumns.CONTENT_URI, true, myObserver);
 
         if (savedInstanceState == null) {
             new LoadFavoritesAsync(getContext(), this).execute();
@@ -153,7 +155,7 @@ public class MovieFavFragment extends Fragment implements LoadFavoritesCallback 
     }
 
     public static class DataObserver extends ContentObserver {
-        Context context;
+        final Context context;
 
         public DataObserver(Handler handler, Context context) {
             super(handler);
@@ -163,7 +165,31 @@ public class MovieFavFragment extends Fragment implements LoadFavoritesCallback 
         @Override
         public void onChange(boolean selfChange) {
             super.onChange(selfChange);
-            new LoadFavoritesAsync((FavoriteActivity) context, (LoadFavoritesCallback) context).execute();
+//            new LoadFavoritesAsync(context, (LoadFavoritesCallback) context).execute();
+        }
+
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (data != null) {
+            if (requestCode == DetailActivity.REQUEST_ADD) {
+                if (resultCode == DetailActivity.RESULT_ADD) {
+                    FavoriteItem favoriteItem = data.getParcelableExtra(DetailActivity.EXTRA_FAVORITE);
+                    adapter.addItem(favoriteItem);
+                    rvMovies.smoothScrollToPosition(adapter.getItemCount() - 1);
+                    showSnackbarMessage(getString(R.string.add_success));
+                }
+            }
+            else if (requestCode == DetailActivity.REQUEST_UPDATE) {
+                if (resultCode == DetailActivity.RESULT_DELETE) {
+                    int position = data.getIntExtra(DetailActivity.EXTRA_POSITION, 0);
+                    adapter.removeItem(position);
+                    showSnackbarMessage(getString(R.string.del_fav_success));
+                }
+            }
         }
 
     }
